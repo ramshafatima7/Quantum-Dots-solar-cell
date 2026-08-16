@@ -406,3 +406,61 @@ max_pce = max(pce_values)
 optimal_thickness_nm = absorber_thicknesses_nm[np.argmax(pce_values)]
 
 print(f"Maximum PCE found: {max_pce:.2f}% at absorber thickness: {optimal_thickness_nm:.0f} nm")
+<img width="846" height="547" alt="download" src="https://github.com/user-attachments/assets/baa01969-18d2-4020-b487-ee9b007b2c97" />
+Jsc_mA_cm2, details_jsc = photogenerated_current_density(LAYERS)
+J0_A_cm2, ni, tau = dark_saturation_current_J0(LAYERS)
+V, J = solve_JV(Jsc_mA_cm2, J0_A_cm2, n_ideal=1.5)
+pv_params = extract_pv_parameters(V, J)
+
+import matplotlib.pyplot as plt
+
+plt.figure(figsize=(8, 6))
+plt.plot(V, J)
+plt.xlabel('Voltage (V)')
+plt.ylabel('Current Density (mA/cm$^2$)')
+plt.title('J-V Curve for Optimized Device') # Updated title
+plt.grid(True)
+plt.show()
+
+print(f"Voc: {pv_params['Voc']:.3f} V")
+print(f"Jsc: {pv_params['Jsc']:.2f} mA/cm^2")
+print(f"FF: {pv_params['FF']:.2f} %")
+print(f"PCE: {pv_params['PCE']:.2f} %")
+ Voc: 0.573 V
+Jsc: 37.52 mA/cm^2
+FF: 76.77 %
+PCE: 16.52 %
+<img width="694" height="547" alt="download (1)" src="https://github.com/user-attachments/assets/6ee21a44-3590-404a-b836-660b0c6843c3" />
+
+import matplotlib.pyplot as plt
+import matplotlib.patches as patches
+
+def plot_solar_cell_structure(layers):
+    fig, ax = plt.subplots(figsize=(8, 4))
+
+    total_thickness = sum(layer['thickness_nm'] for layer in layers.values())
+
+    current_y = 0
+    for layer_name, layer_params in layers.items():
+        thickness = layer_params['thickness_nm']
+
+        # Create a rectangle for each layer
+        rect = patches.Rectangle((0, current_y), 1, thickness, linewidth=1, edgecolor='black', facecolor=plt.cm.tab20(len(layers.keys()) - list(layers.keys()).index(layer_name)))
+        ax.add_patch(rect)
+
+        # Add label for the layer
+        ax.text(0.5, current_y + thickness / 2, f"{layer_name}\n({thickness} nm)",
+                ha='center', va='center', color='black', fontsize=10)
+
+        current_y += thickness
+
+    ax.set_xlim(0, 1)
+    ax.set_ylim(0, total_thickness)
+    ax.set_xticks([]) # Hide x-axis ticks
+    ax.set_ylabel('Thickness (nm)')
+    ax.set_title('Simulated Solar Cell Structure')
+    plt.gca().invert_yaxis() # Invert y-axis to show layers from top to bottom (as in typical device cross-sections)
+    plt.show()
+
+plot_solar_cell_structure(LAYERS)
+<img width="695" height="352" alt="download (2)" src="https://github.com/user-attachments/assets/deb3133f-9b94-4c3f-b4a2-e4143412ef24" />
