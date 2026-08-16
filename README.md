@@ -1,4 +1,4 @@
-# Perovskite-solar-cell
+#Quantum-Dots-solar-cell
 import numpy as np
 
 # ----------------------- Module 1: Physical constants -----------------------
