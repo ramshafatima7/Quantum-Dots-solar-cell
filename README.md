@@ -1,4 +1,5 @@
-#Quantum-Dots-solar-cell
+# Quantum-Dots-solar-cell
+Research on quantum dot solar cells and quantum confinement effects
 import numpy as np
 
 # ----------------------- Module 1: Physical constants -----------------------
